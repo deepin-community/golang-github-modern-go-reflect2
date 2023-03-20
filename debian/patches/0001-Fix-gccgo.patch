@@ -1,0 +1,69 @@
+From: Shengjing Zhu <zhsj@debian.org>
+Date: Sun, 27 Feb 2022 00:21:02 +0800
+Subject: Fix gccgo
+
+Forwarded: no
+---
+ unsafe_link.go       |  6 ------
+ unsafe_link_gc.go    | 12 ++++++++++++
+ unsafe_link_gccgo.go | 12 ++++++++++++
+ 3 files changed, 24 insertions(+), 6 deletions(-)
+ create mode 100644 unsafe_link_gc.go
+ create mode 100644 unsafe_link_gccgo.go
+
+diff --git a/unsafe_link.go b/unsafe_link.go
+index b49f614..3e1ce71 100644
+--- a/unsafe_link.go
++++ b/unsafe_link.go
+@@ -2,15 +2,9 @@ package reflect2
+ 
+ import "unsafe"
+ 
+-//go:linkname unsafe_New reflect.unsafe_New
+-func unsafe_New(rtype unsafe.Pointer) unsafe.Pointer
+-
+ //go:linkname typedmemmove reflect.typedmemmove
+ func typedmemmove(rtype unsafe.Pointer, dst, src unsafe.Pointer)
+ 
+-//go:linkname unsafe_NewArray reflect.unsafe_NewArray
+-func unsafe_NewArray(rtype unsafe.Pointer, length int) unsafe.Pointer
+-
+ // typedslicecopy copies a slice of elemType values from src to dst,
+ // returning the number of elements copied.
+ //go:linkname typedslicecopy reflect.typedslicecopy
+diff --git a/unsafe_link_gc.go b/unsafe_link_gc.go
+new file mode 100644
+index 0000000..a3202f8
+--- /dev/null
++++ b/unsafe_link_gc.go
+@@ -0,0 +1,12 @@
++//go:build gc
++// +build gc
++
++package reflect2
++
++import "unsafe"
++
++//go:linkname unsafe_New reflect.unsafe_New
++func unsafe_New(rtype unsafe.Pointer) unsafe.Pointer
++
++//go:linkname unsafe_NewArray reflect.unsafe_NewArray
++func unsafe_NewArray(rtype unsafe.Pointer, length int) unsafe.Pointer
+diff --git a/unsafe_link_gccgo.go b/unsafe_link_gccgo.go
+new file mode 100644
+index 0000000..a5870ed
+--- /dev/null
++++ b/unsafe_link_gccgo.go
+@@ -0,0 +1,12 @@
++//go:build gccgo
++// +build gccgo
++
++package reflect2
++
++import "unsafe"
++
++//go:linkname unsafe_New reflect.unsafe__New
++func unsafe_New(rtype unsafe.Pointer) unsafe.Pointer
++
++//go:linkname unsafe_NewArray reflect.unsafe__NewArray
++func unsafe_NewArray(rtype unsafe.Pointer, length int) unsafe.Pointer

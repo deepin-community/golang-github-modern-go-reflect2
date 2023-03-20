@@ -1,4 +1,4 @@
-version=3
-opts=filenamemangle=s/.+\/v?(\d\S*)\.tar\.gz/golang-github-modern-go-reflect2-\$1\.tar\.gz/,\
-uversionmangle=s/(\d)[_\.\-\+]?(RC|rc|pre|dev|beta|alpha)[.]?(\d*)$/\$1~\$2\$3/ \
-  https://github.com/modern-go/reflect2/tags .*/v?(\d\S*)\.tar\.gz
+version=4
+opts="mode=git, pgpmode=none" \
+  https://github.com/modern-go/reflect2 \
+  refs/tags/v?@ANY_VERSION@ debian
